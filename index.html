@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Compre Bitcoin</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      color: #f7931a;
+      font-family: 'Courier New', monospace;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .conteudo {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding-top: 15%;
+      color: #f7931a;
+      text-shadow: 0 0 10px #f7931a;
+    }
+
+    .conteudo h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-shadow: 0 0 5px #ffffff;
+    }
+
+    .conteudo h2 {
+      font-size: 2em;
+      margin-top: 10px;
+      color: #f7931a;
+      text-shadow: 0 0 15px #f7931a;
+    }
+
+    .contador {
+      margin-top: 40px;
+      font-size: 1.1em;
+      color: #00ff00;
+      text-shadow: 0 0 8px #00ff00;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <div class="conteudo">
+    <h1>Estude o Bitcoin</h1>
+    <h2>🟠 ₿ Compre Bitcoin 🟠<br>— Mude seu futuro —</h2>
+    <div class="contador">
+      Acessos: <span id="visitas">Carregando...</span>
+    </div>
+  </div>
+
+  <script>
+    // Efeito Matrix
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letras = "アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const fonteTamanho = 14;
+    const colunas = canvas.width / fonteTamanho;
+    const gotas = [];
+    for (let x = 0; x < colunas; x++) gotas[x] = 1;
+
+    function desenhar() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00FF00";
+      ctx.font = fonteTamanho + "px monospace";
+
+      for (let i = 0; i < gotas.length; i++) {
+        const texto = letras[Math.floor(Math.random() * letras.length)];
+        ctx.fillText(texto, i * fonteTamanho, gotas[i] * fonteTamanho);
+
+        if (gotas[i] * fonteTamanho > canvas.height && Math.random() > 0.975) {
+          gotas[i] = 0;
+        }
+
+        gotas[i]++;
+      }
+    }
+    setInterval(desenhar, 33);
+
+    // Contador de acessos usando CountAPI
+    fetch('https://api.countapi.xyz/hit/comprebitcoin/matrix2025')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('visitas').textContent = data.value;
+      })
+      .catch(() => {
+        document.getElementById('visitas').textContent = "Erro ao contar";
+      });
+  </script>
+</body>
+</html>
